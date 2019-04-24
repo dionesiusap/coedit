@@ -15,10 +15,10 @@
 
 ### Penjelasan Program
 
-##### Notepad (UI)
+#### Notepad (UI)
 program kami menggunakan qt sebagai library pembantu membuat user interface. Kelas notepad berguna untuk menampilkan data dan menangkap input dari user (key press). Kelas notepad berhubungan dengan kelas controller melalui mekanisme signal dan slot dari qt. Kelas notepad memiliki 1 thread yang berjalan untuk memperbarui gui.
 
-##### Controller
+#### Controller
 kelas ini berfungsi sebagai pengatur jalannya program. Terdapat 1 buah thread yang berjalan di kelas controller, thread ini berguna untuk memeriksa apakah ada masukan perintah dari kelas lain. kelas controller berhubungan dengan kelas messenger melalui mekanisme queue, dimana jika ada pesan baru dari kelas messengger maka messenger akan meletakan pesan tersebut ke dalam messagequeue yang dapat diakses oleh controller. Kelas controller berhubungan dengan kelas notepad melalui mekanisme signal dan slot dari qt. Kelas controller juga memegang deletion buffer dan version vector.
 
 #### CRDT
@@ -38,3 +38,18 @@ karena alasan kemudahan implementasi fungsi crdt terdapat pada kelas controller.
 #### Messenger
 program kami berkomunikasi satu sama lain menggunakan koneksi udp, program yang berjalan tidak bisa menjangkau peer yang berada di belakang network dengan NAT. Kelas messenger memiliki 2 buah thread, thread untuk mendengarkan pesan masuk dan thread untuk mengirim pesan. Kelas ini berhubungan dengan controller melalu queue. Ketika ada pesan masuk thread server akan memasukan pesan ke inboxqueue dan jika controller ingin mengirim pesan maka controller harus memasukan data ke outboxqueue.
 
+#### Version Vector dan Deletion Buffer
+version vector disimpan dengan struktur data map, yang menghubungan siteId sebagai key dan counter sebagai value. Deletion buffer disimpan dalam bentuk queue. Kedua struktur ini berguna untuk menangani kasus terjadinya penghapusan dengan delay. program akan memasukan seluruh aksi delete ke deletion buffer, lalu jika counter dari siteId pada action delete sudah sama dengan atau lebih dari counter pada version vector dan data belum ditemukan maka dianggap delete invalid (kasus idempoten), jika counter pada action masih lebih dari version vector maka program menunggu version hingga cocok.
+
+### Kasus Uji
+
+#### Uji Komutatif
+- yang cat sama chat
+#### Uji Idempotensi
+- yang ngapus hat
+#### Uji Kausalitas
+- yang kalo datanya lama uji deletion buffer
+#### Uji Insert Between
+- awalnya masukin ab terus masukin data sebanyak mungkin di antara a sama b nya jadi misalnya a1111111111111111111111111111111111111111111111111b, tujuannya buat cek crdtnya valid apa ga
+
+## Screenshot!

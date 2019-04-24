@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = notepad1.0.0
-DISTDIR = /home/aditbro/Projects/sister/build/.tmp/notepad1.0.0
+DISTDIR = /home/aditbro/Projects/sisters/build/.tmp/notepad1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/aditbro/Qt/5.12.2/gcc_64/lib
 LIBS          = $(SUBLIBS) -L/home/aditbro/Qt/5.12.2/gcc_64/lib -lQt5PrintSupport -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread   
@@ -873,7 +873,7 @@ moc_notepad.cpp: ../src/notepad.h \
 		../src/crdt.h \
 		moc_predefs.h \
 		../../../Qt/5.12.2/gcc_64/bin/moc
-	/home/aditbro/Qt/5.12.2/gcc_64/bin/moc $(DEFINES) --include /home/aditbro/Projects/sister/build/moc_predefs.h -I/home/aditbro/Qt/5.12.2/gcc_64/mkspecs/linux-g++ -I/home/aditbro/Projects/sister/src -I/home/aditbro/Qt/5.12.2/gcc_64/include -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtPrintSupport -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtWidgets -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtGui -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../src/notepad.h -o moc_notepad.cpp
+	/home/aditbro/Qt/5.12.2/gcc_64/bin/moc $(DEFINES) --include /home/aditbro/Projects/sisters/build/moc_predefs.h -I/home/aditbro/Qt/5.12.2/gcc_64/mkspecs/linux-g++ -I/home/aditbro/Projects/sisters/src -I/home/aditbro/Qt/5.12.2/gcc_64/include -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtPrintSupport -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtWidgets -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtGui -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../src/notepad.h -o moc_notepad.cpp
 
 moc_controller.cpp: ../src/controller.h \
 		../../../Qt/5.12.2/gcc_64/include/QtCore/QObject \
@@ -963,7 +963,7 @@ moc_controller.cpp: ../src/controller.h \
 		../src/vvector.h \
 		moc_predefs.h \
 		../../../Qt/5.12.2/gcc_64/bin/moc
-	/home/aditbro/Qt/5.12.2/gcc_64/bin/moc $(DEFINES) --include /home/aditbro/Projects/sister/build/moc_predefs.h -I/home/aditbro/Qt/5.12.2/gcc_64/mkspecs/linux-g++ -I/home/aditbro/Projects/sister/src -I/home/aditbro/Qt/5.12.2/gcc_64/include -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtPrintSupport -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtWidgets -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtGui -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../src/controller.h -o moc_controller.cpp
+	/home/aditbro/Qt/5.12.2/gcc_64/bin/moc $(DEFINES) --include /home/aditbro/Projects/sisters/build/moc_predefs.h -I/home/aditbro/Qt/5.12.2/gcc_64/mkspecs/linux-g++ -I/home/aditbro/Projects/sisters/src -I/home/aditbro/Qt/5.12.2/gcc_64/include -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtPrintSupport -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtWidgets -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtGui -I/home/aditbro/Qt/5.12.2/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../src/controller.h -o moc_controller.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
