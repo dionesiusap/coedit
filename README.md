@@ -11,7 +11,8 @@
 
 ### Pembagian Tugas
 - 13516082 (50%): fungsi Controller, Messenger, VersionVector, deletion buffer.
-
+- 13516043 (kasihin persenannya nil%): fungsi UI, crdt.
+- 13516145 (kasihin persenannya nil%):
 
 ### Penjelasan Program
 
