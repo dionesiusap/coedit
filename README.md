@@ -16,9 +16,9 @@ Misal:
 ```
 
 ### Pembagian Tugas
-- 13516043 (22.5%): UI dan CRDT.
+- 13516043 (24%): UI dan CRDT.
 - 13516082 (50%): fungsi Controller, Messenger, VersionVector, Deletion Buffer.
-- 13516145 (27.5%): [README.md]() (laporan)
+- 13516145 (26%): [README.md]() (laporan)
 
 
 ### Penjelasan Program
