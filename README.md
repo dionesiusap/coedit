@@ -59,4 +59,4 @@ Although this application is pretty solid network-wise, we still have at least o
 3. [Dionesius Agung](https://github.com/dionesiusap) (Computer Science Department, Institut Teknologi Bandung)
 
 ### Project Information
-This project was first developed as an assignment for IF3230 Parallel and Distributed Systems course, fall semester of 2018. Further development of this project has not been discussed yet, but contribution to this project is open.
+This project was first developed as an assignment for IF3230 Parallel and Distributed Systems course, spring semester of 2019. Further development of this project has not been discussed yet, but contribution to this project is open.
