@@ -1,5 +1,5 @@
 # Peer to Peer Collaborative Editing
-<p align="center"><b><i>"A cool way to say 'Google Docs'"</i></b><br><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+<p align="center"><b><i>"A cool way to say 'Google Docs'"</i></b><br><br><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
 </p>
 CoEdit is a peer-to-peer, real-time collaborative text editor that can handle 3 connected clients at one time, built from scratch in C++ utilizing CRDT technology. This is an open source project initiated by 3 computer science students from ITB.
 
