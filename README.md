@@ -1,37 +1,31 @@
 # Peer to Peer Collaborative Editing
 #### A cool way to say "Google Docs"
+CoEdit is a peer-to-peer, real-time collaborative text editor that can handle 3 connected clients at one time, built from scratch in C++ utilizing CRDT technology. This is an open source project initiated by 3 computer science students from ITB.
 
-### Petunjuk Penggunaan
-1. Install [Qt](qt.io/download) sesuai OS anda (pastikan compiler memiliki unistd.h)
-2. Clone repo ini
-3. Buka folder build
-4. Jalankan perintah `make`
-5. Jalankan program dengan command berikut:
+## Usage
+1. Install [Qt](qt.io/download) (make sure your compiler has `unistd.h`)
+2. Clone this repo
+3. Go to repo directory build folder
+4. Run `make` command
+5. Run app using the following command:
 ```
-    ./notepad iplocal:portlocal ippeer:portpeer ippeer:portpeer
+    ./notepad local_ip:local_port peer1_ip:peer1_port peer2_ip:peer2_port
 ```
-Misal:
+For example:
 ```
     ./notepad 127.0.0.1:2000 192.168.0.1:3000 192.168.0.2:3000
 ```
 
-### Pembagian Tugas
-- 13516043 (24%): UI dan CRDT.
-- 13516082 (50%): fungsi Controller, Messenger, VersionVector, Deletion Buffer.
-- 13516145 (26%): [README.md]() (laporan)
+## How It Works
+CoEdit is a peer-to-peer, real-time collaborative text editor that can handle 3 connected clients at one time. A peer-to-peer network design is chosen as it eliminates the need of one dedicated computer running as a server for the application, hence decreasing the coupling within the system, i.e. the failure of one computer does not affect the network as a whole. Each node in the network acts as a network server and client workstation and data from one node is distributed to any other nodes in the network, hence a distributed database.  
 
+Going with this design and implementing a distributed database comes with a challenge. How do we make sure that each peer has the same, most up to date, and agreed upon database? In other words, how do we ensure the consistency of the database? One solution is to use [Conflict-free Replicated Data Type (CRDT)](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type), a data type that can be replicated across multiple nodes where the replicas can be updated independently and concurrently without coordination between the replicas. CRDT is chosen as it has commutative property. It also guarantees idempotency and causality because it is mathematically possible to resolve inconsistencies which might occur.
 
-### Penjelasan Program
+### Graphical User Interface
+Qt library is used to build the graphical user interface. The GUI is implemented in the `notepad` component. This `notepad` component shows data and captures user inputs, which are key presses. This component is able to communicate with the `controller` component via the Signal and Slot mechanism that is provided by Qt library. This component has 1 reserved thread running to keep the GUI updated.
 
-#### Notepad (UI)
-Program kami menggunakan Qt sebagai library pembantu membuat user interface - yaitu kelas notepad. Kelas ini berguna untuk menampilkan data dan menangkap input dari user yaitu berupa key press. Kelas notepad terhubung dengan kelas controller melalui mekanisme signal dan slot dari Qt. Notepad memiliki 1 thread khusus yang berjalan untuk memperbarui GUI.
-
-#### Controller
-Kelas ini berfungsi sebagai pengatur jalannya program secara keseluruhan. Terdapat 1 buah thread yang berjalan di kelas controller yang berguna untuk memeriksa apakah ada masukan perintah dari kelas lain. Kelas controller berhubungan dengan kelas messenger melalui mekanisme queue, yaitu apabila jika ada pesan baru dari kelas messenger maka messenger akan meletakan pesan tersebut ke dalam sebuah antrian (`MessageQueue`) yang dapat diakses oleh controller. Kelas controller berhubungan dengan kelas notepad melalui mekanisme signal dan slot dari Qt. Kelas controller-lah yang juga memiliki fitur Deletion Buffer dan Version Vector.
-
-#### CRDT
-CRDT diimplementasikan menggunakan struktur data vector dari c++. Position pada CRDT disimpan dalam bentuk double, hal ini dilakukan untuk memudahkan pengiriman data CRDT melalui socket (karena tidak ada pointer pada CRDT). Kelas ini digunakan untuk merepresentasikan sebuah data beserta perintah yang datang bersama data tersebut. Berikut ini adalah struktur kelas CRDT kami : 
-
+### CRDT
+The CRDT is implemented with vector data structure in C++. This object represents a data and a command that comes with the data. Here is the structure of CRDT class.
 ```
 class CRDT 
     int siteId;
@@ -40,47 +34,28 @@ class CRDT
     char value;
     double position;
 ```
+Note that the `position` has `double` data type, this is to make CRDT data transmission through socket easier, as there is no such thing as pointer for CRDT data type.  
 
-Agar mudah, implementasi fungsi CRDT (bukan tipe data/class CRDT) terdapat pada kelas controller.
+Also note that the implementation of functions is within the `controller` component.
 
+#### Controller
+The `controller` component's function, as the name suggests, is to control the whole flow of the application. This component has 1 thread that continuously checks interrupts or incoming commands from other components. This component has the ability to communicate with the `messenger` component via queue mechanism, i.e. when there is a new message from `messenger`, it will place the message into a designated queue, `MessageQueue`, which can be accessed by the `controller`.
+
+### Peer-to-peer Connection
 #### Messenger
-Program kami berkomunikasi satu sama lain menggunakan koneksi UDP. Namun, program yang berjalan tidak bisa menjangkau peer yang berada di network dengan NAT. Kelas messenger memiliki 2 buah thread, thread untuk mendengarkan pesan masuk dan thread untuk mengirim pesan. Kelas ini berhubungan dengan controller melalui queue. Ketika ada pesan masuk ke dalam thread ini, messenger akan memasukan pesan ke InboxQueue. Jika messenger ingin mengirim pesan maka messenger harus memasukan data ke OutboxQueue.
+This application utilizes UDP connection to communicate to each other but it can't reach peers that is located within a network with NAT. This component has 2 running threads, one for listening for incoming messages and one for sending messages.
 
-#### Version Vector dan Deletion Buffer
-Version vector disimpan dengan struktur data map, yang menghubungkan siteId sebagai key dan counter sebagai value. Deletion buffer disimpan dalam bentuk queue. Kedua struktur ini berguna untuk menangani kasus terjadinya penghapusan dengan delay. Program akan memasukan seluruh aksi delete ke deletion buffer. Jika counter dari siteId pada action delete sudah sama dengan atau lebih dari counter pada version vector, dan data belum ditemukan, maka command delete tersebut dianggap invalid (kasus idempoten). Jika counter pada action masih lebih dari version vector, maka program menunggu version hingga cocok.
+## Future Improvements
+Although this application is pretty solid network-wise, we still have at least one thing to address. Remember that we are using UDP connection for this application? Yeah, we didn't handle packet loss events. We have not implemented any protocols to handle packet loss and ensure a packet is resent when one is not received. We could implement some sort of protocol to handle packet loss if we wanted to (which, honestly, is not gonna happen haha) in the future.
 
-
-### Analisis
-#### Apakah bisa dibuat lebih baik?
-Program yang kami buat secara general sudah cukup solid, tetapi ada satu hal yang kami tidak handle: yaitu ketika adanya packet loss. Kami tidak mengimplementasikan protocol untuk mengatasi apabila terjadinya kehilangan packet, dan memastikan bahwa packet yang hilang tersebut bisa terkirim lagi. Apabila sebuah packet hilang, maka command tidak dianggap masuk. Untuk membuat program ini menjadi lebih bisa diandalkan, kami bisa mengimplementasikan protocol untuk mengatasi packet loss yang mungkin terjadi pada UDP.
-
-
-### Kasus Uji
-Untuk mensimulasikan delay, kami membuat agar fungsi sendData memiliki delay satu detik sebelum data benar-benar dikirim.
-
-#### Uji Komutatif
-Program kami ketika melakukan dua command dengan urutan yang berbeda, dapat terjamin memiliki hasil yang sama. Hal ini karena CRDT memastikan operasi-operasi (khususnya delete) menunjuk ke suatu karakter yang merupakan karakter yang dimaksud. Hal ini dapat diuji dengan kasus CAT CHAT HAT yang berada pada spesifikasi.
-
-#### Uji Idempotensi
-Apabila terjadinya penghapusan karakter yang sama di kedua tempat, maka hanya satu karakter yang sama itu yang dihapus. Alasannya sama, yaitu CRDT memastikan operasi menunjuk ke karakter yang dimaksud. Hal ini dapat diuji dengan kasus HAT yang berada pada spesifikasi.
-
-#### Uji Kausalitas
-Uji ini merupakan uji untuk apabila terjadinya suatu latency pada operasi, yang membuat delete terjadi terlebih dahulu sebelum insert, padahal seharusnya insert terjadi terlebih dahulu sebelum delete. Uji ini merupakan uji terhadap kebenaran dari Deletion Buffer yang telah dibuat. 
-
-#### Uji Insert Between
-Untuk mengecek kebenaran dari CRDT, pengujian dapat dilakukan dengan cara pertama-tama menginsert dua buah karakter yang berbeda, misal a dan b, kemudian di antara a dan b kita memasukkan data sebanyak mungkin. Misal: 
-```
-a
-ab
-a111111111111111111111111111b
-```
-
-## Screenshot!
-### Tampilan 
+## Screenshot
 ![General UI](doc/img/1556141623946.png)
 
-### Tampilan, dengan command prompt (proses operasi)
-![With extra cmd](doc/img/1556141700779.png)
+## Authors and Project Information
+### Authors
+1. [Aditya Farizki](https://github.com/aditbro) (Computer Science Department, Institut Teknologi Bandung)
+2. [Daniel Yudianto](https://github.com/daniel-yg) (Computer Science Department, Institut Teknologi Bandung)
+3. [Dionesius Agung](https://github.com/dionesiusap) (Computer Science Department, Institut Teknologi Bandung)
 
-### Pengujian, simulasi delay
-![Delay simulation](doc/img/1556141815093.png)
+### Project Information
+This project was first developed as an assignment for IF3230 Parallel and Distributed Systems course, fall semester of 2018. Further development of this project has not been discussed yet, but contribution to this project is open.
